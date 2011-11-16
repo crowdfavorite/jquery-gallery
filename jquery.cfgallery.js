@@ -277,7 +277,7 @@
 		If the image doesn't exist yet, this function will create and append it based on the
 		thumbnail list markup. */
 		createImage: function(i) {
-			var data, $img, $wrapper, $title, $caption,
+			var data, $img, $figure,
 				opts = gal.opts,
 				$thumb = this.$thumbs.eq(i),
 				// Used in callback
@@ -285,29 +285,8 @@
 				scale = this.scale;
 			
 			data = this.getImageData($thumb);
-			
-			$wrapper = $('<figure/>').addClass(opts.figureClass);
+			$figure = this.createFigure($thumb, data);
 
-			if (data.title || data.caption) {
-				$figcaption = $('<figcaption/>')
-					.addClass(opts.figcaptionClass)
-					.appendTo($wrapper);
-				
-				if (data.title) {
-					$title = $('<div />')
-						.addClass(opts.titleClass)
-						.html(data.title)
-						.appendTo($figcaption);
-				};
-
-				if (data.caption) {
-					$caption = $('<div />')
-						.addClass(opts.captionClass)
-						.html(data.caption)
-						.appendTo($figcaption);
-				};
-			};
-			
 			$img = this.loadImage(data.src)
 				.css({
 					/* We have to do a bit of a dance with image hide/show and centering
@@ -330,7 +309,7 @@
 							[$stage.width(), $stage.height()]
 						);
 					
-					$wrapper.css({
+					$figure.css({
 						'display': 'none'
 					});
 					
@@ -346,11 +325,40 @@
 						.trigger('loaded.cfgal');
 				});
 			
-			$img.prependTo($wrapper);
-			$wrapper.appendTo($stage);
+			$img.prependTo($figure);
+			$figure.appendTo($stage);
 			
-			$thumb.data('cfgalExpanded', $wrapper);
-			return $wrapper;
+			$thumb.data('cfgalExpanded', $figure);
+			return $figure;
+		},
+		
+		createFigure: function ($thumb, data) {
+			var opts = gal.opts,
+			$figure, $title, $caption, $figcaption;
+			
+			$figure = $('<figure/>').addClass(opts.figureClass);
+
+			if (data.title || data.caption) {
+				$figcaption = $('<figcaption/>')
+					.addClass(opts.figcaptionClass)
+					.appendTo($figure);
+				
+				if (data.title) {
+					$title = $('<div />')
+						.addClass(opts.titleClass)
+						.html(data.title)
+						.appendTo($figcaption);
+				};
+
+				if (data.caption) {
+					$caption = $('<div />')
+						.addClass(opts.captionClass)
+						.html(data.caption)
+						.appendTo($figcaption);
+				};
+			};
+			
+			return $figure;
 		},
 		
 		preloadNeighbors: function(index) {
