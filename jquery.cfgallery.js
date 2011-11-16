@@ -331,8 +331,6 @@
 						);
 					
 					$wrapper.css({
-						'width': dims[0],
-						'height': dims[1],
 						'display': 'none'
 					});
 					
