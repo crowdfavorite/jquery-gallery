@@ -162,7 +162,7 @@
 			};
 			
 			$img = this.getImage(i);
-			if (typeof $img === 'undefined') {
+			if (typeof $img == 'undefined') {
 				$img = this.createImage(i);
 				$img.bind('loaded.cfgal', function(e) {
 					callback.apply(that, [$(e.currentTarget)]);
@@ -287,7 +287,30 @@
 			data = this.getImageData($thumb);
 			$figure = this.createFigure($thumb, data);
 
-			$img = this.loadImage(data.src)
+			$img = this.loadImage(data.src, function() {
+				var t = $(this),
+					dims = scale(
+						[t.width(), t.height()],
+						[$stage.width(), $stage.height()]
+					);
+				
+				$figure.css({
+					'display': 'none'
+				});
+				
+				t
+					.css({
+						'width': dims[0],
+						'height': dims[1],
+						// Add CSS for centering.
+						'margin-left': -1 * (dims[0] / 2),
+						'margin-top': -1 * (dims[1] / 2),
+						'visibility': 'visible'
+					})
+					.trigger('loaded.cfgal');
+			});
+			
+			$img
 				.css({
 					/* We have to do a bit of a dance with image hide/show and centering
 					Though the image is loaded through loadImage, making its width/height
@@ -301,29 +324,7 @@
 					'top': '50%',
 					'visibility': 'hidden'
 				})
-				.trigger('create.cfgal')
-				.load(function() {
-					var t = $(this),
-						dims = scale(
-							[t.width(), t.height()],
-							[$stage.width(), $stage.height()]
-						);
-					
-					$figure.css({
-						'display': 'none'
-					});
-					
-					t
-						.css({
-							'width': dims[0],
-							'height': dims[1],
-							// Add CSS for centering.
-							'margin-left': -1 * (dims[0] / 2),
-							'margin-top': -1 * (dims[1] / 2),
-							'visibility': 'visible'
-						})
-						.trigger('loaded.cfgal');
-				});
+				.trigger('create.cfgal');
 			
 			$img.prependTo($figure);
 			$figure.appendTo($stage);
@@ -374,11 +375,24 @@
 			};
 		},
 
-		loadImage: function(src) {
-			var img = new Image(),
-				$img;
-			img.src = src;
-			img.alt = "";
+		loadImage: function(src, callback) {
+			var img = new Image();
+			/* Really roundabout stuff to get around IE < 8's insane image
+			caching behavior.
+			1. src MUST be set after load event is bound
+			2. image MUST be passed through jQuery's factory twice to be updated in IE (at least I think that's what's happening)
+			3. Load event must run on a timeout, or else IE will ignore for cached images (it fires load) before it populates the data
+			   for cached images, apparently.
+			 */
+			$(img).load(function (e) {
+				var cb = $.proxy(callback, this);
+				setTimeout(function () {
+					cb(e);
+				}, 2);
+			});
+		 	img.src = src;
+			img.alt = '';
+		
 			return $(img);
 		},
 		
