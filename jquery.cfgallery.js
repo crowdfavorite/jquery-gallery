@@ -261,9 +261,9 @@
 				title = $img.attr('title'),
 				caption = $img.attr('alt');
 
-			/* Favor caption if they're the same */
+			/* Favor title if they're the same */
 			if (title === caption) {
-				title = '';
+				caption = '';
 			};
 
 			return {
