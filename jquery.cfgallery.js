@@ -256,10 +256,9 @@
 			return this.$thumbs.eq(i).data('cfgalExpanded');
 		},
 		
-		getImageData: function ($thumb) {
-			var $img = $thumb.find('img'),
-				title = $img.attr('title'),
-				caption = $img.attr('alt');
+		getImageData: function($thumb) {
+			var title = $thumb.data('title'),
+				caption = $thumb.data('caption');
 
 			/* Favor title if they're the same */
 			if (title === caption) {
@@ -298,33 +297,31 @@
 					'display': 'none'
 				});
 				
-				t
-					.css({
-						'width': dims[0],
-						'height': dims[1],
-						// Add CSS for centering.
-						'margin-left': -1 * (dims[0] / 2),
-						'margin-top': -1 * (dims[1] / 2),
-						'visibility': 'visible'
-					})
-					.trigger('loaded.cfgal');
+				t.css({
+					'width': dims[0],
+					'height': dims[1],
+					// Add CSS for centering.
+					'margin-left': -1 * (dims[0] / 2),
+					'margin-top': -1 * (dims[1] / 2),
+					'visibility': 'visible'
+				})
+				.trigger('loaded.cfgal');
 			});
 			
-			$img
-				.css({
-					/* We have to do a bit of a dance with image hide/show and centering
-					Though the image is loaded through loadImage, making its width/height
-					info available in most browsers, IE7 doesn't like to give us the w/h
-					without the image being shown. We'll load and place it in the stage,
-					then after loading is finished, we'll set w/h for centering and switch
-					out visibility:hidden for display:none -- that way we can animate the
-					image effectively. */
-					'position': 'absolute',
-					'left': '50%',
-					'top': '50%',
-					'visibility': 'hidden'
-				})
-				.trigger('create.cfgal');
+			$img.css({
+				/* We have to do a bit of a dance with image hide/show and centering
+				Though the image is loaded through loadImage, making its width/height
+				info available in most browsers, IE7 doesn't like to give us the w/h
+				without the image being shown. We'll load and place it in the stage,
+				then after loading is finished, we'll set w/h for centering and switch
+				out visibility:hidden for display:none -- that way we can animate the
+				image effectively. */
+				'position': 'absolute',
+				'left': '50%',
+				'top': '50%',
+				'visibility': 'hidden'
+			})
+			.trigger('create.cfgal');
 			
 			$img.prependTo($figure);
 			$figure.appendTo($stage);
