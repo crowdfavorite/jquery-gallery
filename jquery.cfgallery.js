@@ -143,10 +143,10 @@
 				// Hide old and show new if both are present
 				if (current !== null && current !== i) {
 					$current = this.getImage(current);
-					// Hide others
-					this.$stage.children().not($current).hide();
+					// Hide others / Dequeue all animations before starting a new one.
+					this.$stage.children().not($current).stop().removeClass('init').hide();
 					// Dequeue all animations before starting a new one.
-					this.$stage.find('img').stop(true, true);
+					this.$stage.find('figure').stop(true, true);
 					this.transitionSlides(img, $current);
 				}
 				// If there is no current (first load) just show.
@@ -177,7 +177,7 @@
 		transitionSlides: function($neue, $old) {
 			var that = this;
 			if ($old !== null && typeof $old !== 'undefined') {
-				$old.stop().removeClass('init').fadeOut('fast', function() {
+				$old.fadeOut('fast', function() {
 					that.showSlide($neue);
 				});
 			}
@@ -188,7 +188,8 @@
 		},
 		
 		showSlide: function($neue) {
-			$neue.stop().siblings().hide().end().addClass('init').fadeIn('medium', function() {
+			$neue.stop().addClass('init').fadeIn('medium', function() {
+				$(this).css({ opacity: 1 });
 				var func = $.proxy(function() {
 					$(this).removeClass('init');
 				}, this);
