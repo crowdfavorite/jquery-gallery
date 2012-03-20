@@ -1,7 +1,8 @@
 /*!
  * cfgallery - a light-weight, semantic gallery script with bookmarkable slides.
+ * version 1.0
  *
- * Copyright (c) Crowd Favorite
+ * Copyright (c) 2011-2012 Crowd Favorite (http://crowdfavorite.com)
  */
 /*!
  * jQuery hashchange event - v1.3 - 7/21/2010
