@@ -1,6 +1,6 @@
 /*!
  * cfgallery - a light-weight, semantic gallery script with bookmarkable slides.
- * version 1.0
+ * version 1.1
  *
  * Copyright (c) 2011-2012 Crowd Favorite (http://crowdfavorite.com)
  */
