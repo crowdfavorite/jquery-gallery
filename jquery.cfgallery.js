@@ -85,6 +85,31 @@
 				},
 				'loaded.cfgal': function(e) {
 					loading.hide();
+				},
+				'resize.cfgal': function(e, stageWidth, stageHeight) {
+					stage.css({
+						width: stageWidth,
+						height: stageHeight
+					});
+
+					$('figure.gallery-figure img', this).each(function() {
+						var $img = $(this),
+							thumbDims = $img.data('thumbDims');
+
+						var dims = fn.scale(
+								[thumbDims[0], thumbDims[1]],
+								[stageWidth, stageHeight]
+							);
+
+						$img.css({
+							'width': dims[0],
+							'height': dims[1],
+							// Add CSS for centering.
+							'margin-left': -1 * (dims[0] / 2),
+							'margin-top': -1 * (dims[1] / 2),
+							'visibility': 'visible'
+						});
+					})
 				}
 			});
 
@@ -347,16 +372,20 @@
 			$figure = this.createFigure($thumb, data);
 
 			$img = this.loadImage(data.src, function() {
+
 				var t = $(this),
+					thumbDims = [t.prop('naturalWidth') || t.width(), t.prop('naturalHeight') ||t.height()],
 					dims = scale(
-						[t.width(), t.height()],
+						[thumbDims[0], thumbDims[1]],
 						[stage.width(), stage.height()]
 					);
-				
+
 				$figure.css({
 					'display': 'none'
 				});
-				
+
+				t.data('thumbDims', thumbDims);
+
 				t.css({
 					'width': dims[0],
 					'height': dims[1],
