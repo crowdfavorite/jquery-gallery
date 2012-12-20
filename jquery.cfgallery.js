@@ -21,15 +21,15 @@
 	/* Local variable for hash makes lookups faster and is better for closure compiler */
 	var loc = window.location,
 		docEl = window.document.documentElement,
-		stageCounter = 0;
+		stageCounter = 0,
+		currentStageId = 0;
 	
 	/* Constructor */
 	var gal = function(options) {
 		var opts = $.extend(gal.opts, options),
 			fn = gal.helpers,
 			dim = opts.stageDimensions,
-			bgColor = opts.bgColor,
-			currentStageId = 0;
+			bgColor = opts.bgColor;
 		
 		gal.opts = opts;
 
@@ -374,7 +374,7 @@
 			$img = this.loadImage(data.src, function() {
 
 				var t = $(this),
-					thumbDims = [t.prop('naturalWidth') || t.width(), t.prop('naturalHeight') ||t.height()],
+					thumbDims = [t.prop('naturalWidth') || t.width(), t.prop('naturalHeight') || t.height()],
 					dims = scale(
 						[thumbDims[0], thumbDims[1]],
 						[stage.width(), stage.height()]
