@@ -429,6 +429,7 @@
 			})
 			.trigger('create.cfgal');
 			
+			$figure.hide(); // Make sure figure isn't visisble by default
 			$img.prependTo($figure);
 			$figure.appendTo(stage);
 			
